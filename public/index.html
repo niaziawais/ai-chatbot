@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Awais Khan AI Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <img src="https://i.pravatar.cc/50" alt="User" class="user-logo" id="newChatLogo">
+      <h2>Awais Khan AI Chatbot</h2>
+      <button id="newChatBtn" class="sidebar-btn">+ New Chat</button>
+    </div>
+    <div class="chat-list" id="chatList"></div>
+  </aside>
+
+  <main class="chat-placeholder">
+    <p>Click "New Chat" or select previous chat to start messaging.</p>
+  </main>
+
+</div>
+
+<script>
+const chatListEl = document.getElementById("chatList");
+const newChatBtn = document.getElementById("newChatBtn");
+const newChatLogo = document.getElementById("newChatLogo");
+
+let chats = JSON.parse(localStorage.getItem("chatSessions") || "[]");
+
+// Render chat list
+function renderChats(){
+  chatListEl.innerHTML="";
+  chats.forEach((chat,idx)=>{
+    const div = document.createElement("div");
+    div.className="chat-item";
+    div.innerText = chat.name;
+    div.addEventListener("click",()=>{
+      localStorage.setItem("currentChatId",idx);
+      window.location.href="chat.html";
+    });
+    chatListEl.appendChild(div);
+  });
+}
+renderChats();
+
+// Create new chat
+function createNewChat(){
+  const chatName = "Chat "+(chats.length+1);
+  chats.push({name:chatName,messages:[]});
+  localStorage.setItem("chatSessions",JSON.stringify(chats));
+  localStorage.setItem("currentChatId",chats.length-1);
+  window.location.href="chat.html";
+}
+
+newChatBtn.addEventListener("click", createNewChat);
+newChatLogo.addEventListener("click", createNewChat);
+</script>
+
+</body>
+</html>
